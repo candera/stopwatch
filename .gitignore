@@ -1,0 +1,8 @@
+bin
+obj
+*.user
+*.vshost.*
+*.suo
+*.exe
+*.pdb
+Thumbs.db

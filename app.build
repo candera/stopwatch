@@ -1,0 +1,26 @@
+<project name="StopWatch" default="build">
+  <property name="tmpdir" value="tmp" />
+  <target name="build">
+    <mkdir dir="${tmpdir}" />
+    <call target="compile" />
+    <delete dir="${tmpdir}" /> 
+  </target>
+  <target name="compile" depends="resources">
+    <csc debug="true" target="winexe" output="${nant.project.name}.exe">
+      <sources>
+	<includes name="*.cs" />
+      </sources>
+      <references>
+	<includes name="System.Drawing.dll" />
+	<includes name="System.Windows.Forms.dll" />
+      </references>
+      <resources>
+	<includes name="${tmpdir}\*.resources" />
+      </resources>
+    </csc>
+  </target>
+  <target name="resources">
+    <resgen input="Form1.resx" output="${tmpdir}\StopWatch.Form1.resources" />
+    <resgen input="GetTimeDlg.resx" output="${tmpdir}\StopWatch.GetTimeDlg.resources" />
+  </target>
+</project>
