@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Data;
 
 using System.Runtime.InteropServices;
+using System.Media;
+using System.Reflection;
 
 
 namespace StopWatch
@@ -32,9 +34,6 @@ namespace StopWatch
         [DllImport("user32.dll")]
         static extern bool FlashWindow(IntPtr hwnd, bool bInvert);
 
-        [DllImport("user32.dll")]
-        static extern bool MessageBeep(uint uType);
-
         private TimeSpan _accumulated;
         private int _blinkCount;
         private TimeSpan _countdownTime;
@@ -43,7 +42,7 @@ namespace StopWatch
         private GetTimeDlg _getTimeDialog = new GetTimeDlg();
         private TimeSpan _lastBeep = TimeSpan.MinValue; 
         private DateTime _startTime;
-
+        private SoundPlayer _player; 
 
         public App()
         {
@@ -64,6 +63,9 @@ namespace StopWatch
 
             //
 
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("StopWatch.alert.wav");
+            
+            _player = new SoundPlayer(stream); 
         }
 
 
@@ -253,11 +255,11 @@ namespace StopWatch
         private void AlarmAudibly()
         {
             if ((_lastBeep == TimeSpan.MinValue)
-                || (_elapsed - _lastBeep > TimeSpan.FromSeconds(30)))
+                || (_elapsed - _lastBeep > TimeSpan.FromSeconds(60)))
             {
                 if (cbAudibleAlarm.Checked)
                 {
-                    MessageBeep(0);
+                    _player.Play(); 
                     _lastBeep = _elapsed;
                 }
             }
