@@ -210,6 +210,7 @@ namespace StopWatch
             }
 
             _accumulated = TimeSpan.Zero;
+            _lastBeep = TimeSpan.MinValue; 
             CalculateElapsed();
             UpdateTimerLabel();
         }
